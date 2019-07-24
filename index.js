@@ -54,7 +54,7 @@ fs.readFile('SCRAP.csv', function(err, data){
             if(typeof nd == 'string' && nd.length > 14){
                 nd = data[6][3][0][3]
             }
-            
+
             arrUrutanNilai.push({nm : nilaiMTK, nd : nd});
             countRequest++;
             if(countRequest == arrData.length){
@@ -89,6 +89,8 @@ fs.readFile('SCRAP.csv', function(err, data){
             trueData.push(urlData);
 
             result.push(trueData.join(','))
+
+            //set to -1 so there is no duplicate person
             arrUrutanNilai[indexMtk] = -1;
         }
 
