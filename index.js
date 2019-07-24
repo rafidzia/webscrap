@@ -50,6 +50,7 @@ fs.readFile('SCRAP.csv', function(err, data){
             }
         })
     }
+    
     function proceed(){
         arrNilai.sort(function(a, b){return a-b})
         var result = [];
