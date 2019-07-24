@@ -38,12 +38,24 @@ fs.readFile('SCRAP.csv', function(err, data){
     var countRequest = 0;
     var arrNilai = []
     var arrUrutanNilai = []
+    var arrNoDaftar = []
     for(let i = 0; i < arrData.length; i++){
         let arrDataPerbaris = arrData[i].split(";");
+        arrNoDaftar.push(arrDataPerbaris[1]);
         requestData(arrDataPerbaris[1], function(data){
             var nilaiMTK = data[2][3][1][3][0];
             arrNilai.push(nilaiMTK);
-            arrUrutanNilai.push(nilaiMTK);
+            var nd = data[5][3][0][3]
+
+            //error prevent
+            if(typeof nd == "object"){
+                nd = data[4][3][0][3]
+            }
+            if(typeof nd == 'string' && nd.length > 14){
+                nd = data[6][3][0][3]
+            }
+            
+            arrUrutanNilai.push({nm : nilaiMTK, nd : nd});
             countRequest++;
             if(countRequest == arrData.length){
                 proceed()
@@ -55,7 +67,10 @@ fs.readFile('SCRAP.csv', function(err, data){
         arrNilai.sort(function(a, b){return a-b})
         var result = [];
         for(let i = 0; i < arrNilai.length; i++){
-            let index = arrUrutanNilai.indexOf(arrNilai[i]);
+
+            let indexMtk = arrUrutanNilai.map(function(val){return val.nm}).indexOf(arrNilai[i]);
+            let noDaftar = arrUrutanNilai.map(function(val){return val.nd})[indexMtk];
+            let index = arrNoDaftar.indexOf(noDaftar);
             let trueData = arrData[index].split(";");
 
             //removing space/unknown character in name
@@ -74,6 +89,7 @@ fs.readFile('SCRAP.csv', function(err, data){
             trueData.push(urlData);
 
             result.push(trueData.join(','))
+            arrUrutanNilai[indexMtk] = -1;
         }
 
         
