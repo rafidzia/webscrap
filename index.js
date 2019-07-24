@@ -50,7 +50,7 @@ fs.readFile('SCRAP.csv', function(err, data){
             }
         })
     }
-    
+
     function proceed(){
         arrNilai.sort(function(a, b){return a-b})
         var result = [];
@@ -68,6 +68,7 @@ fs.readFile('SCRAP.csv', function(err, data){
             trueData.shift(); 
             trueData.unshift(i + 1); 
 
+            //insert math score and move url field
             let urlData = trueData.pop();
             trueData.push(arrNilai[i])
             trueData.push(urlData);
@@ -75,11 +76,14 @@ fs.readFile('SCRAP.csv', function(err, data){
             result.push(trueData.join(','))
         }
 
-        // retrive and replace header
+        
+        //insert math score field and move url field
         header = header.split(";");
         var urlHeader = header.pop();
         header.push("NILAI MTK");
         header.push(urlHeader);
+
+        // retrive and replace header
         result.unshift(header.join(","));
 
         result = result.join("\n");
